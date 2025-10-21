@@ -37,4 +37,4 @@ afterEach(async () => {
  *
  * @returns A {@link INestApplication} instance for e2e testing.
  */
-export const managedAppInstance = (): INestApplication => appInstance
+export const managedAppInstance = (): INestApplication<App> => appInstance
