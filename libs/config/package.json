@@ -1,19 +1,19 @@
 {
-  "name": "@neoma/{{PACKAGE_NAME}}",
+  "name": "@neoma/config",
   "version": "0.1.0",
-  "description": "{{PACKAGE_DESCRIPTION}}",
-  "author": "Shipdventures",
+  "description": "Simple environment configuration for NestJs.",
+  "author": "Daniel Bruce",
   "repository": {
     "type": "git",
-    "url": "{{REPO_URL}}"
+    "url": "http://github.com/shipdventures/neoma-config"
   },
   "bugs": {
-    "url": "{{REPO_URL}}/issues"
+    "url": "http://github.com/shipdventures/neoma-config/issues"
   },
-  "homepage": "{{REPO_URL}}#readme",
+  "homepage": "http://github.com/shipdventures/neoma-config#readme",
   "keywords": [
     "nestjs",
-    "{{PACKAGE_NAME}}",
+    "config",
     "laravel",
     "neoma"
   ],

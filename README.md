@@ -15,16 +15,16 @@ cd neoma-<your-package-name>
 ### 2. Replace placeholders
 
 Search and replace throughout the project:
-- `{{PACKAGE_NAME}}` → Your package name (e.g., "garmr", "validation")
-- `{{PACKAGE_DESCRIPTION}}` → Short description
-- `{{REPO_URL}}` → GitHub repository URL (e.g., "https://github.com/shipdventures/neoma-garmr")
+- `config` → Your package name (e.g., "garmr", "validation")
+- `Simple environment configuration for NestJs.` → Short description
+- `http://github.com/shipdventures/neoma-config` → GitHub repository URL (e.g., "https://github.com/shipdventures/neoma-garmr")
 
 **Quick find/replace:**
 ```bash
 # macOS/Linux
-find . -type f -name "*.json" -o -name "*.md" -o -name "*.ts" | xargs sed -i '' 's/{{PACKAGE_NAME}}/your-package-name/g'
-find . -type f -name "*.json" -o -name "*.md" -o -name "*.ts" | xargs sed -i '' 's/{{PACKAGE_DESCRIPTION}}/Your description/g'
-find . -type f -name "*.json" -o -name "*.md" -o -name "*.ts" | xargs sed -i '' 's|{{REPO_URL}}|https://github.com/your-org/your-repo|g'
+find . -type f -name "*.json" -o -name "*.md" -o -name "*.ts" | xargs sed -i '' 's/config/your-package-name/g'
+find . -type f -name "*.json" -o -name "*.md" -o -name "*.ts" | xargs sed -i '' 's/Simple environment configuration for NestJs./Your description/g'
+find . -type f -name "*.json" -o -name "*.md" -o -name "*.ts" | xargs sed -i '' 's|http://github.com/shipdventures/neoma-config|https://github.com/your-org/your-repo|g'
 ```
 
 ### 3. Rename directories

@@ -1,5 +1,5 @@
 {
-  "name": "neoma-{{PACKAGE_NAME}}",
+  "name": "neoma-config",
   "engines": {
     "node": ">=22.0.0"
   },
@@ -9,13 +9,13 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "tsc -p ./libs/{{PACKAGE_NAME}}/tsconfig.lib.json",
+    "build": "tsc -p ./libs/config/tsconfig.lib.json",
     "lint": "eslint .",
     "test": "node node_modules/.bin/jest --watch --runInBand",
     "test:e2e": "node node_modules/.bin/jest --config ./specs/jest-e2e.json --watch --runInBand"
   },
   "dependencies": {
-    "@neoma/{{PACKAGE_NAME}}": "file:./libs/{{PACKAGE_NAME}}",
+    "@neoma/config": "file:./libs/config",
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
