@@ -72,9 +72,11 @@ neoma-<package-name>/
 │   ├── jest-e2e.json
 │   └── *.e2e-spec.ts
 ├── fixtures/                     # Test fixtures and utilities
-│   ├── app/                      # Test app setup
-│   ├── models/                   # Test entities/models
-│   └── matchers/                 # Custom Jest matchers
+│   ├── app/                      # Test app lifecycle management
+│   ├── database/                 # In-memory database setup
+│   ├── models/                   # Model factory patterns
+│   ├── matchers/                 # Custom Jest matchers
+│   └── e2e-setup.js              # E2E build hook
 ├── package.json                  # Development package.json
 ├── tsconfig.json                 # Root TypeScript config
 ├── eslint.config.mjs             # ESLint config
@@ -100,6 +102,46 @@ neoma-<package-name>/
 - Test edge cases and error handling
 
 **Don't test the same config twice** - E2E covers integration, unit tests cover logic.
+
+## Testing Infrastructure
+
+The template includes ready-to-use testing utilities in the `fixtures/` directory:
+
+### App Lifecycle (`fixtures/app`)
+```typescript
+import { managedAppInstance } from "fixtures/app"
+
+describe("My E2E Test", () => {
+  it("should work", async () => {
+    const app = managedAppInstance()
+    // App is automatically initialized before each test
+    // and cleaned up after each test
+  })
+})
+```
+
+### Database Setup (`fixtures/database`)
+```typescript
+import { managedDatasourceInstance } from "fixtures/database"
+
+describe("My Database Test", () => {
+  it("should query database", async () => {
+    const datasource = managedDatasourceInstance()
+    // Fresh in-memory SQLite database for each test
+    // Automatically destroyed after each test
+  })
+})
+```
+
+### Model Factories (`fixtures/models`)
+See `fixtures/models/README.md` for the pattern and examples.
+
+### Custom Matchers (`fixtures/matchers`)
+- `toThrowEquals(error)` - Assert errors match exactly
+- `toEqualError(error)` - Assert errors are equal
+
+### E2E Build Hook (`fixtures/e2e-setup.js`)
+Automatically builds the library before E2E tests run.
 
 ## Scripts
 

@@ -1,7 +1,17 @@
-import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common"
+import { Module } from "@nestjs/common"
+import { TypeOrmModule } from "@nestjs/typeorm"
 
-@Module({})
-export class AppModule implements NestModule {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public configure(_consumer: MiddlewareConsumer): any {}
-}
+@Module({
+  imports: [
+    TypeOrmModule.forRoot({
+      type: "sqlite",
+      database: ":memory:",
+      entities: ["src/**/*.entity.ts"],
+      synchronize: true,
+    }),
+    // Add your package module here for E2E testing
+    // Example: YourPackageModule.forRoot(),
+  ],
+  controllers: [],
+})
+export class AppModule {}
