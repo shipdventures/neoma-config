@@ -95,11 +95,25 @@ neoma-<package-name>/
 - Uses real NestJS app, real database
 - Proves README instructions work
 
+**Example**: The template includes `specs/app.e2e-spec.ts` demonstrating how to test endpoints using `managedAppInstance()` and supertest.
+
 ### Unit Tests (`libs/<package>/src/**/*.spec.ts`)
 - TDD: Drive implementation
 - Test individual classes/functions
 - Fast feedback loop
 - Test edge cases and error handling
+
+**Example**: The template includes `libs/PACKAGE_NAME/src/modules/example.module.spec.ts` showing how to test NestJS modules.
+
+### Complete Testing Flow
+
+1. **Write library code** in `libs/PACKAGE_NAME/src/`
+2. **Write unit tests** alongside your code (`*.spec.ts`)
+3. **Export from** `libs/PACKAGE_NAME/src/index.ts`
+4. **Import in** `src/app.module.ts` for E2E testing
+5. **Write E2E tests** in `specs/` to validate integration
+
+The template includes working examples of all these steps with `ExampleModule`.
 
 **Don't test the same config twice** - E2E covers integration, unit tests cover logic.
 

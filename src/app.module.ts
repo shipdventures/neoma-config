@@ -1,5 +1,7 @@
 import { Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
+import { ExampleModule } from "@neoma/{{PACKAGE_NAME}}"
+import { AppController } from "./app.controller"
 
 @Module({
   imports: [
@@ -9,9 +11,10 @@ import { TypeOrmModule } from "@nestjs/typeorm"
       entities: ["src/**/*.entity.ts"],
       synchronize: true,
     }),
-    // Add your package module here for E2E testing
+    ExampleModule,
+    // Add additional package modules here for E2E testing
     // Example: YourPackageModule.forRoot(),
   ],
-  controllers: [],
+  controllers: [AppController],
 })
 export class AppModule {}
