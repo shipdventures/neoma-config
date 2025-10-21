@@ -1,5 +1,6 @@
 import { INestApplication } from "@nestjs/common"
 import { Test } from "@nestjs/testing"
+import { App } from "supertest/types"
 import { AppModule } from "src/app.module"
 
 /**
@@ -7,7 +8,7 @@ import { AppModule } from "src/app.module"
  *
  * @returns A {@link INestApplication} instance for e2e testing.
  */
-export const nestJsApp = async (): Promise<INestApplication> => {
+export const nestJsApp = async (): Promise<INestApplication<App>> => {
   const moduleFixture = await Test.createTestingModule({
     imports: [AppModule],
   }).compile()
@@ -17,7 +18,7 @@ export const nestJsApp = async (): Promise<INestApplication> => {
   })
 }
 
-let appInstance: INestApplication
+let appInstance: INestApplication<App>
 beforeEach(async () => {
   appInstance = await nestJsApp()
   await appInstance.init()
