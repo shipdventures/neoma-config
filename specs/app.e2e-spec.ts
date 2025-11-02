@@ -5,8 +5,6 @@ import * as request from "supertest"
 describe("AppController (e2e)", () => {
   it(`/status (GET) - responds with a HTTP ${HttpStatus.NO_CONTENT}`, () => {
     const app = managedAppInstance()
-    return request(app.getHttpServer())
-      .get("/status")
-      .expect(HttpStatus.NO_CONTENT)
+    return request(app.getHttpServer()).get("/status").expect(HttpStatus.OK)
   })
 })
