@@ -10,6 +10,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Planned
 - `coerce` mode option for automatic type conversion based on TypeScript types
 
+## [0.2.1] - 2025-11-04
+
+### Added
+- **'has' trap support** for safe property existence checking using `'property' in config` syntax
+- Safe existence checking that doesn't trigger strict mode errors
+- Documentation and examples for ecosystem package integration patterns
+
+### Enhanced
+- Strict mode now supports safe property checking before value access
+- Improved ecosystem compatibility for optional configuration integration
+
 ## [0.2.0] - 2025-11-04
 
 ### Added
@@ -46,7 +57,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive documentation and examples
 - Support for `.env`, `.env.local`, `.env.{NODE_ENV}`, and `.env.{NODE_ENV}.local` files
 
-[Unreleased]: https://github.com/shipdventures/neoma-config/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/shipdventures/neoma-config/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/shipdventures/neoma-config/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/shipdventures/neoma-config/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/shipdventures/neoma-config/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/shipdventures/neoma-config/releases/tag/v0.1.0
