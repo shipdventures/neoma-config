@@ -1,17 +1,14 @@
-import { Injectable } from "@nestjs/common"
+import { Inject, Injectable, Optional } from "@nestjs/common"
 
 /**
  * Options for configuring the ConfigModule.
  *
- * @property loadEnv If true, loads environment variables from a .env file into process.env.
- * @property strict If true, throws an error when accessing an undefined environment variable.
- * @property coerce If true, attempts to coerce environment variable values that look like numbers
- * or booleans to the expected types.
+ * @property loadEnv - If true, loads environment variables from .env files into process.env
+ * @property strict - If true, throws an error when accessing undefined environment variables
  */
 export type ConfigOptions = {
   loadEnv: boolean
   strict: boolean
-  coerce: boolean
 }
 
 /**
@@ -56,20 +53,38 @@ export const CONFIG_OPTIONS = Symbol("CONFIG_OPTIONS")
  * }
  *
  * @remarks
- * Returns undefined if the environment variable is not set.
  * Supports destructuring: const { apiKey, apiUrl } = this.config
+ *
+ * @throws {Error} When strict mode is enabled and accessing an undefined environment variable
  */
 @Injectable()
 export class ConfigService<T extends Record<string, any>> {
-  public constructor() {
+  public constructor(
+    @Optional()
+    @Inject(CONFIG_OPTIONS)
+    options: Partial<ConfigOptions> = {},
+  ) {
     return new Proxy(this as unknown as T, {
       get: (_target, prop: string): string | undefined => {
+        // Handle special properties that shouldn't trigger strict mode
+        if (typeof prop === "symbol" || prop === "then" || prop === "toJSON") {
+          return undefined
+        }
+
         const envKey = prop
           .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
           .replace(/([A-Z]+)([A-Z][a-z0-9]+)/g, "$1_$2")
           .toUpperCase()
 
-        return process.env[envKey]
+        const value = process.env[envKey]
+
+        if (value === undefined && options.strict) {
+          throw new Error(
+            `Strict mode error when accessing configuration property '${prop}'. ${envKey} is not defined on process.env`,
+          )
+        }
+
+        return value
       },
     })
   }

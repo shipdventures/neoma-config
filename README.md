@@ -208,6 +208,63 @@ DATABASE_URL=postgres://localhost/myapp_prod_local  # This wins over other files
 
 **Important:** Variables already set in `process.env` (from your deployment environment, Docker, shell exports, etc.) always take precedence over any `.env` file values.
 
+## Strict Mode
+
+Enable strict mode to throw errors when accessing undefined environment variables:
+
+```typescript
+ConfigModule.forRoot({ strict: true })
+```
+
+This helps catch configuration errors early rather than silently returning `undefined`.
+
+### Example:
+
+```typescript
+import { Module } from '@nestjs/common'
+import { ConfigModule } from '@neoma/config'
+
+@Module({
+  imports: [
+    // Enable strict mode
+    ConfigModule.forRoot({ strict: true })
+  ],
+})
+export class AppModule {}
+
+// In your service:
+@Injectable()
+export class PaymentService {
+  constructor(
+    @InjectConfig()
+    private config: TypedConfig<{ 
+      stripeApiKey: string
+      webhookSecret: string 
+    }>
+  ) {}
+
+  processPayment() {
+    // With strict mode: Throws error if STRIPE_API_KEY is not set
+    const key = this.config.stripeApiKey
+    // Error: "Strict mode error when accessing configuration property 'stripeApiKey'. STRIPE_API_KEY is not defined on process.env"
+    
+    // Without strict mode: Returns undefined silently
+    const key = this.config.stripeApiKey  // undefined
+  }
+}
+```
+
+### Combining Options:
+
+You can combine `loadEnv` and `strict` for a complete solution:
+
+```typescript
+ConfigModule.forRoot({ 
+  loadEnv: true,   // Load .env files
+  strict: true     // Throw on missing required vars
+})
+```
+
 ## API Reference
 
 ### `ConfigModule`

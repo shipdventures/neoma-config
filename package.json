@@ -12,7 +12,7 @@
     "build": "tsc -p ./libs/config/tsconfig.lib.json",
     "lint": "eslint .",
     "test": "node node_modules/.bin/jest --watch --runInBand --verbose",
-    "test:e2e": "NEOMA_MANAGED_APP_MODULE_PATH=src/default/app.module.ts#AppModule node node_modules/.bin/jest --config ./specs/jest-e2e.json --verbose --watch --runInBand"
+    "test:e2e": "NEOMA_MANAGED_APP_MODULE_PATH=src/app.module.ts#AppModule node node_modules/.bin/jest --config ./specs/jest-e2e.json --verbose --watch --runInBand"
   },
   "dependencies": {
     "@neoma/config": "file:./libs/config/dist",
@@ -80,7 +80,8 @@
     ],
     "setupFilesAfterEnv": [
       "jest-extended/all",
-      "<rootDir>/fixtures/matchers/index.js"
+      "<rootDir>/fixtures/matchers/index.js",
+      "<rootDir>/fixtures/build-module.js"
     ],
     "moduleNameMapper": {
       "^fixtures/(.*)$": "<rootDir>/fixtures/$1",

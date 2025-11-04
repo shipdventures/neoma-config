@@ -1,7 +1,6 @@
 import { faker } from "@faker-js/faker/."
 import { Test, TestingModule } from "@nestjs/testing"
-import { ConfigService, TypedConfig } from "./config.service"
-import { ConfigModule } from "./config.module"
+import { ConfigModule, ConfigService, TypedConfig } from "@neoma/config"
 import "fixtures/env"
 
 // Test data for basic functionality (property access)
@@ -87,6 +86,36 @@ describe("ConfigService", () => {
             expect(config.notDefined).toBeUndefined()
           })
         })
+      })
+    })
+  })
+
+  describe("ConfigModule.forRoot({ strict: true })", () => {
+    const definedKey = faker.lorem.word()
+    const definedValue = faker.lorem.word()
+    const notDefinedKey = faker.lorem.word()
+
+    describe("property access", () => {
+      let config: TypedConfig<{ [key: string]: string }>
+
+      beforeEach(async () => {
+        process.env[definedKey.toUpperCase()] = definedValue
+
+        const app: TestingModule = await Test.createTestingModule({
+          imports: [ConfigModule.forRoot({ strict: true })],
+        }).compile()
+
+        config = app.get(ConfigService)
+      })
+
+      it(`'${definedKey}' should return ${definedValue} when process.env.${definedKey.toUpperCase()} is set`, () => {
+        expect(config[definedKey]).toBe(definedValue)
+      })
+
+      it(`'${notDefinedKey}' should throw an error when process.env.${notDefinedKey.toUpperCase()} is not set`, () => {
+        expect(() => config[notDefinedKey]).toThrow(
+          `Strict mode error when accessing configuration property '${notDefinedKey}'. ${notDefinedKey.toUpperCase()} is not defined on process.env`,
+        )
       })
     })
   })
