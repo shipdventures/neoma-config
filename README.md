@@ -254,6 +254,37 @@ export class PaymentService {
 }
 ```
 
+### Safe Property Access in Strict Mode
+
+When using strict mode, you can safely check if a property exists before accessing it using the `in` operator:
+
+```typescript
+@Injectable()
+export class FlexibleService {
+  constructor(
+    @InjectConfig()
+    private config: TypedConfig<{ 
+      requiredApiKey: string
+      optionalFeatureFlag?: string 
+    }>
+  ) {}
+
+  initialize() {
+    // Safe existence check - won't throw in strict mode
+    if ('optionalFeatureFlag' in this.config) {
+      // Only access if it exists
+      const flag = this.config.optionalFeatureFlag
+      console.log('Feature flag enabled:', flag)
+    }
+    
+    // Always access required properties directly
+    const apiKey = this.config.requiredApiKey // Throws if not set
+  }
+}
+```
+
+This pattern is especially useful for ecosystem packages that need to optionally integrate with other configuration while maintaining strict mode compatibility.
+
 ### Combining Options:
 
 You can combine `loadEnv` and `strict` for a complete solution:

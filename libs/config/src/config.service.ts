@@ -86,6 +86,19 @@ export class ConfigService<T extends Record<string, any>> {
 
         return value
       },
+      has: (_target, prop: string): boolean => {
+        // Handle special properties
+        if (typeof prop === "symbol" || prop === "then" || prop === "toJSON") {
+          return false
+        }
+
+        const envKey = prop
+          .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
+          .replace(/([A-Z]+)([A-Z][a-z0-9]+)/g, "$1_$2")
+          .toUpperCase()
+
+        return process.env[envKey] !== undefined
+      },
     })
   }
 }

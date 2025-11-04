@@ -29,7 +29,7 @@ const modules = [
     module: ConfigModule.forRoot({
       loadEnv: false,
       strict: false,
-      coerce: false,
+      // coerce: false,
     }),
   },
 ]
@@ -60,6 +60,10 @@ describe("ConfigService", () => {
         describe("property access", () => {
           it(`'variable' should return ${value} from process.env.VARIABLE`, () => {
             expect(config.variable).toBe(value)
+          })
+
+          it(`Checking for the existence of 'variable' should return true when process.env.VARIABLE is  set`, () => {
+            expect("variable" in config).toBeTrue()
           })
 
           it(`'screamingSnake' should return ${screamingSnake} from process.env.SCREAMING_SNAKE`, () => {
@@ -116,6 +120,10 @@ describe("ConfigService", () => {
         expect(() => config[notDefinedKey]).toThrow(
           `Strict mode error when accessing configuration property '${notDefinedKey}'. ${notDefinedKey.toUpperCase()} is not defined on process.env`,
         )
+      })
+
+      it(`Checking for the existence of'${notDefinedKey}' should return false when process.env.${notDefinedKey.toUpperCase()} is not set`, () => {
+        expect(notDefinedKey in config).toBeFalse()
       })
     })
   })
