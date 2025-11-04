@@ -64,7 +64,28 @@ import { ConfigModule } from "@neoma/config"
 export class AppModule {}
 ```
 
-### 2. Inject and use configuration
+### 2. Load environment variables (optional)
+
+```typescript
+import { Module } from '@nestjs/common'
+import { ConfigModule } from '@neoma/config'
+
+@Module({
+  imports: [
+    // Load .env files automatically  
+    ConfigModule.forRoot({ loadEnv: true })
+  ],
+})
+export class AppModule {}
+```
+
+This automatically loads environment variables from:
+- `.env.{NODE_ENV}.local` (highest priority)
+- `.env.local` 
+- `.env.{NODE_ENV}`
+- `.env` (lowest priority)
+
+### 3. Inject and use configuration
 
 ```typescript
 import { Injectable } from "@nestjs/common"
@@ -150,6 +171,42 @@ Under the hood, `@neoma/config` uses a Proxy to intercept property access and au
 3. Return the value with proper typing
 
 This means zero configuration, zero boilerplate, and full type safety.
+
+## Environment File Loading
+
+Enable automatic `.env` file loading with the `loadEnv` option:
+
+```typescript
+ConfigModule.forRoot({ loadEnv: true })
+```
+
+### File Loading Priority (highest to lowest):
+1. **Existing `process.env` variables** (from Docker, Kubernetes, shell, etc.) - **Always wins**
+2. `.env.{NODE_ENV}.local` - Environment-specific local overrides  
+3. `.env.local` - Local overrides for all environments
+4. `.env.{NODE_ENV}` - Environment-specific configuration
+5. `.env` - Default configuration
+
+### Example:
+```bash
+# If DATABASE_URL is already set in process.env, it beats everything
+export DATABASE_URL=postgres://from-environment/myapp  # This always wins
+
+# .env
+DATABASE_URL=postgres://localhost/myapp
+PORT=3000
+
+# .env.local  
+DATABASE_URL=postgres://localhost/myapp_local  # This wins over .env (but loses to process.env)
+
+# .env.production
+DATABASE_URL=postgres://prod-server/myapp
+
+# .env.production.local
+DATABASE_URL=postgres://localhost/myapp_prod_local  # This wins over other files when NODE_ENV=production
+```
+
+**Important:** Variables already set in `process.env` (from your deployment environment, Docker, shell exports, etc.) always take precedence over any `.env` file values.
 
 ## API Reference
 

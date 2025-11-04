@@ -1,19 +1,22 @@
 {
   "name": "@neoma/config",
   "version": "0.1.0",
-  "description": "Simple environment configuration for NestJs.",
+  "description": "Simple, type-safe environment configuration for NestJS applications",
   "author": "Daniel Bruce",
   "repository": {
     "type": "git",
-    "url": "http://github.com/shipdventures/neoma-config"
+    "url": "https://github.com/shipdventures/neoma-config"
   },
   "bugs": {
-    "url": "http://github.com/shipdventures/neoma-config/issues"
+    "url": "https://github.com/shipdventures/neoma-config/issues"
   },
-  "homepage": "http://github.com/shipdventures/neoma-config#readme",
+  "homepage": "https://github.com/shipdventures/neoma-config#readme",
   "keywords": [
     "nestjs",
     "config",
+    "environment",
+    "env",
+    "typescript",
     "laravel",
     "neoma"
   ],

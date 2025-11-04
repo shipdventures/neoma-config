@@ -4,21 +4,22 @@
     "node": ">=22.0.0"
   },
   "version": "0.1.0",
-  "description": "",
+  "description": "Simple, type-safe environment configuration for NestJS applications",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
     "build": "tsc -p ./libs/config/tsconfig.lib.json",
     "lint": "eslint .",
-    "test": "node node_modules/.bin/jest --watch --runInBand",
-    "test:e2e": "NEOMA_MANAGED_APP_MODULE_PATH=src/default/app.module.ts#AppModule node node_modules/.bin/jest --config ./specs/jest-e2e.json --watch --runInBand"
+    "test": "node node_modules/.bin/jest --watch --runInBand --verbose",
+    "test:e2e": "NEOMA_MANAGED_APP_MODULE_PATH=src/default/app.module.ts#AppModule node node_modules/.bin/jest --config ./specs/jest-e2e.json --verbose --watch --runInBand"
   },
   "dependencies": {
     "@neoma/config": "file:./libs/config/dist",
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "dotenv": "^17.2.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },

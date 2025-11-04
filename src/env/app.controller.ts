@@ -15,22 +15,31 @@ export class AppController {
   public constructor(
     @InjectConfig()
     private readonly config: TypedConfig<{
-      databaseEngine: string
       port: string
+      databaseConnection: string
+      databaseUrl: string
+      appBuild: string
+      appName: string
     }>,
   ) {}
 
   /**
    * Handles GET requests to the /config endpoint.
    *
-   * Should successfully return the current database engine
-   * and port configuration from process.env.
+   * Returns the application configuration values.
    *
-   * @returns An object containing the database engine and port.
+   * @returns A configuration object containing port, databaseConnection, databaseUrl, appBuild, and appName.
    */
   @Get("config")
-  public configuration(): { databaseEngine: string; port: string } {
-    const { databaseEngine, port } = this.config
-    return { databaseEngine, port }
+  public configuration(): {
+    port: string
+    databaseConnection: string
+    databaseUrl: string
+    appBuild: string
+    appName: string
+  } {
+    const { port, databaseConnection, databaseUrl, appBuild, appName } =
+      this.config
+    return { port, databaseConnection, databaseUrl, appBuild, appName }
   }
 }

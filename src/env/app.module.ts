@@ -3,8 +3,7 @@ import { ConfigModule } from "@neoma/config"
 import { AppController } from "./app.controller"
 
 /**
- * Application module for testing the configuration setup that loads
- * env files.
+ * Application module for testing the default configuration setup.
  *
  * Imports the ConfigModule to provide type-safe access to environment
  * variables and registers the AppController to handle incoming requests
