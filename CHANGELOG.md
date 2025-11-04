@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `strict` mode option for runtime validation of required environment variables  
 - `coerce` mode option for automatic type conversion based on TypeScript types
 
+## [0.1.1] - 2025-11-04
+
+### Added
+- Explicit test coverage for snake_case property access (e.g., `config.database_url`)
+- Documentation proving universal naming convention support
+
 ## [0.1.0] - 2025-11-04
 
 ### Added
@@ -25,5 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive documentation and examples
 - Support for `.env`, `.env.local`, `.env.{NODE_ENV}`, and `.env.{NODE_ENV}.local` files
 
-[Unreleased]: https://github.com/shipdventures/neoma-config/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/shipdventures/neoma-config/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/shipdventures/neoma-config/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/shipdventures/neoma-config/releases/tag/v0.1.0

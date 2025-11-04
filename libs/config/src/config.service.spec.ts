@@ -79,6 +79,10 @@ describe("ConfigService", () => {
             expect(config.databaseURL).toBe(dbUrl)
           })
 
+          it(`'database_url' should return ${dbUrl} from process.env.DATABASE_URL`, () => {
+            expect(config.database_url).toBe(dbUrl)
+          })
+
           it("'notDefined' should return undefined when process.env.NOT_DEFINED is not set", () => {
             expect(config.notDefined).toBeUndefined()
           })
