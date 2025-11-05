@@ -1,6 +1,6 @@
 {
   "name": "@neoma/config",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Simple, type-safe environment configuration for NestJS applications",
   "author": "Daniel Bruce",
   "repository": {

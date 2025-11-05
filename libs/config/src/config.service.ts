@@ -21,13 +21,13 @@ export const CONFIG_OPTIONS = Symbol("CONFIG_OPTIONS")
 /**
  * Checks if a string represents a "clean" number that should be coerced.
  * Excludes decimal leading zeros and empty strings to preserve user intent.
- * 
+ *
  * @param str - The string value to check for number coercion eligibility
  * @returns True if the string should be coerced to a number, false otherwise
- * 
+ *
  * @example
  * isCleanNumber("123")     // true - clean integer
- * isCleanNumber("1.23")    // true - clean float  
+ * isCleanNumber("1.23")    // true - clean float
  * isCleanNumber("0x1F")    // true - valid hex
  * isCleanNumber("007")     // false - decimal leading zero
  * isCleanNumber("")        // false - empty string
@@ -36,10 +36,10 @@ export const CONFIG_OPTIONS = Symbol("CONFIG_OPTIONS")
 function isCleanNumber(str: string | undefined): boolean {
   // No undefined, null, or empty strings
   if (!str) return false
-  
+
   // Block decimal leading zeros (but allow hex/octal/binary)
   if (/^0[0-9]/.test(str.trim())) return false
-  
+
   // Must be parseable
   const num = Number(str)
   return !isNaN(num)
@@ -189,7 +189,7 @@ export class ConfigService<T extends Record<string, any>> {
  *
  * @example
  * // With coerce enabled, use appropriate TypeScript types
- * type ServerConfig = TypedConfig<{ 
+ * type ServerConfig = TypedConfig<{
  *   port: number;     // Will be coerced from string
  *   debug: boolean;   // Will be coerced from "true"/"false"
  *   name: string;     // Stays as string

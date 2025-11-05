@@ -7,8 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Planned
-- `coerce` mode option for automatic type conversion based on TypeScript types
+## [0.3.0] - 2025-11-05
+
+### Added
+- **Type coercion feature** via `ConfigModule.forRoot({ coerce: true })` for automatic primitive conversion
+- Smart conversion of environment variable strings to JavaScript primitives:
+  - `"true"/"false"` → boolean values
+  - Numeric strings → numbers (integers, floats, hex, octal, binary, scientific notation)
+  - `"null"/"undefined"/"Infinity"/"NaN"` → respective JavaScript values
+- Intelligent edge case handling:
+  - Decimal leading zeros preserved as strings (`"007"` → `"007"`)
+  - Whitespace trimmed for number conversion (`" 123 "` → `123`)
+  - Empty strings preserved (`""` → `""`)
+  - Valid decimals converted (`"0.123"` → `0.123`)
+- Comprehensive documentation with examples and supported conversion patterns
+- Full integration with existing `strict` and `loadEnv` options
+
+### Enhanced
+- Extended return types to support `string | boolean | number | undefined | null`
+- Updated TypeScript interfaces and JSDoc with coerce examples
+- Enhanced README with complete coerce feature documentation
 
 ## [0.2.1] - 2025-11-04
 
@@ -57,7 +75,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive documentation and examples
 - Support for `.env`, `.env.local`, `.env.{NODE_ENV}`, and `.env.{NODE_ENV}.local` files
 
-[Unreleased]: https://github.com/shipdventures/neoma-config/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/shipdventures/neoma-config/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/shipdventures/neoma-config/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/shipdventures/neoma-config/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/shipdventures/neoma-config/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/shipdventures/neoma-config/compare/v0.1.0...v0.1.1

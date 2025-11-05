@@ -174,7 +174,9 @@ describe("ConfigService", () => {
           })
 
           it(`'envLeadingTrailingWhitespace' should return string '${envLeadingTrailingWhitespace}' when process.env.ENV_LEADING_TRAILING_WHITESPACE is set to '${envLeadingTrailingWhitespace}'`, () => {
-            expect(config.envLeadingTrailingWhitespace).toBe(envLeadingTrailingWhitespace)
+            expect(config.envLeadingTrailingWhitespace).toBe(
+              envLeadingTrailingWhitespace,
+            )
           })
 
           it(`'envEmpty' should return string '' when process.env.ENV_EMPTY is set to ''`, () => {
@@ -252,7 +254,9 @@ describe("ConfigService", () => {
   })
 
   describe("ConfigModule.forRoot({ coerce: true })", () => {
-    let config: TypedConfig<{ [key: string]: string | number | boolean | null | undefined }>
+    let config: TypedConfig<{
+      [key: string]: string | number | boolean | null | undefined
+    }>
 
     beforeEach(async () => {
       process.env.PORT = port
@@ -329,7 +333,9 @@ describe("ConfigService", () => {
 
     it(`it should coerce '${envLeadingTrailingWhitespace}' to ${Number(envLeadingTrailingWhitespace)} (whitespace allowed)`, () => {
       expect(config.envLeadingTrailingWhitespace).toBeNumber()
-      expect(config.envLeadingTrailingWhitespace).toEqual(Number(envLeadingTrailingWhitespace))
+      expect(config.envLeadingTrailingWhitespace).toEqual(
+        Number(envLeadingTrailingWhitespace),
+      )
     })
 
     it("it should NOT coerce empty string and keep it as string", () => {
@@ -344,7 +350,9 @@ describe("ConfigService", () => {
   })
 
   describe("ConfigModule.forRoot({ strict: true, coerce: true })", () => {
-    let config: TypedConfig<{ [key: string]: string | number | boolean | null | undefined }>
+    let config: TypedConfig<{
+      [key: string]: string | number | boolean | null | undefined
+    }>
 
     beforeEach(async () => {
       const app: TestingModule = await Test.createTestingModule({
