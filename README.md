@@ -285,16 +285,100 @@ export class FlexibleService {
 
 This pattern is especially useful for ecosystem packages that need to optionally integrate with other configuration while maintaining strict mode compatibility.
 
+## Type Coercion
+
+Enable automatic type conversion from environment variable strings to JavaScript primitives:
+
+```typescript
+ConfigModule.forRoot({ coerce: true })
+```
+
+With coercion enabled, string values are automatically converted to their appropriate types:
+
+### Supported Conversions:
+
+**Booleans:**
+```bash
+FEATURE_ENABLED=true    # → true (boolean)
+DEBUG_MODE=false        # → false (boolean)
+```
+
+**Numbers:**
+```bash
+PORT=3000              # → 3000 (number)
+TIMEOUT=1.5            # → 1.5 (number)
+WORKERS=0x10           # → 16 (hex)
+MEMORY=1e6             # → 1000000 (scientific)
+```
+
+**Special Values:**
+```bash
+CACHE_TTL=null         # → null
+DEFAULT_VALUE=undefined # → undefined
+MAX_RETRIES=Infinity   # → Infinity
+INVALID_CONFIG=NaN     # → NaN
+```
+
+**Preserved as Strings:**
+```bash
+VERSION=007            # → "007" (leading zero preserved)
+SPACING=" 123 "        # → 123 (whitespace trimmed and converted)
+EMPTY_VAL=             # → "" (empty string preserved)
+API_KEY=sk_test_123    # → "sk_test_123" (non-numeric stays string)
+```
+
+### Example Usage:
+
+```typescript
+interface ServerConfig {
+  port: number          // Coerced from "3000"
+  debug: boolean        // Coerced from "true"
+  timeout: number       // Coerced from "30"
+  apiKey: string        // Stays as string
+  workers?: number      // Coerced from "4" or undefined
+}
+
+@Module({
+  imports: [ConfigModule.forRoot({ coerce: true })]
+})
+export class AppModule {}
+
+@Injectable()
+export class ServerService {
+  constructor(
+    @InjectConfig()
+    private config: TypedConfig<ServerConfig>
+  ) {}
+
+  start() {
+    const port = this.config.port      // number: 3000
+    const debug = this.config.debug    // boolean: true
+    const timeout = this.config.timeout // number: 30
+    
+    // Type-safe operations
+    if (debug) console.log(`Starting on port ${port}`)
+    setTimeout(() => this.healthCheck(), timeout * 1000)
+  }
+}
+```
+
 ### Combining Options:
 
-You can combine `loadEnv` and `strict` for a complete solution:
+You can combine all options for a complete configuration solution:
 
 ```typescript
 ConfigModule.forRoot({ 
   loadEnv: true,   // Load .env files
-  strict: true     // Throw on missing required vars
+  strict: true,    // Throw on missing required vars
+  coerce: true     // Auto-convert types
 })
 ```
+
+This gives you:
+- **Environment file loading** with proper precedence
+- **Runtime validation** for required variables  
+- **Automatic type conversion** for primitives
+- **Type safety** with TypeScript interfaces
 
 ## API Reference
 

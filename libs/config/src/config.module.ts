@@ -18,6 +18,11 @@ import * as dotenv from "dotenv"
  * imports: [ConfigModule.forRoot({ strict: true })]
  *
  * @example
+ * // With coerce enabled - automatic type conversion
+ * imports: [ConfigModule.forRoot({ coerce: true })]
+ * // Now "3000" becomes 3000, "true" becomes true, etc.
+ *
+ * @example
  * // Inject in your service
  * constructor(
  *   @InjectConfig()
@@ -35,6 +40,7 @@ export class ConfigModule {
   public static forRoot({
     loadEnv = false,
     strict = false,
+    coerce = false,
   }: Partial<ConfigOptions> = {}): DynamicModule {
     if (loadEnv) {
       dotenv.config({
@@ -52,7 +58,7 @@ export class ConfigModule {
       module: ConfigModule,
       providers: [
         ConfigService,
-        { provide: CONFIG_OPTIONS, useValue: { loadEnv, strict } },
+        { provide: CONFIG_OPTIONS, useValue: { loadEnv, strict, coerce } },
       ],
       exports: [ConfigService],
     }

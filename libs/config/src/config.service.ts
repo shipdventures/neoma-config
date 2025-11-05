@@ -5,16 +5,45 @@ import { Inject, Injectable, Optional } from "@nestjs/common"
  *
  * @property loadEnv - If true, loads environment variables from .env files into process.env
  * @property strict - If true, throws an error when accessing undefined environment variables
+ * @property coerce - If true, attempts to coerce environment variable types
  */
 export type ConfigOptions = {
   loadEnv: boolean
   strict: boolean
+  coerce: boolean
 }
 
 /**
  * Injection token for providing ConfigOptions to the ConfigModule.
  */
 export const CONFIG_OPTIONS = Symbol("CONFIG_OPTIONS")
+
+/**
+ * Checks if a string represents a "clean" number that should be coerced.
+ * Excludes decimal leading zeros and empty strings to preserve user intent.
+ * 
+ * @param str - The string value to check for number coercion eligibility
+ * @returns True if the string should be coerced to a number, false otherwise
+ * 
+ * @example
+ * isCleanNumber("123")     // true - clean integer
+ * isCleanNumber("1.23")    // true - clean float  
+ * isCleanNumber("0x1F")    // true - valid hex
+ * isCleanNumber("007")     // false - decimal leading zero
+ * isCleanNumber("")        // false - empty string
+ * isCleanNumber(" 123 ")   // true - whitespace allowed
+ */
+function isCleanNumber(str: string | undefined): boolean {
+  // No undefined, null, or empty strings
+  if (!str) return false
+  
+  // Block decimal leading zeros (but allow hex/octal/binary)
+  if (/^0[0-9]/.test(str.trim())) return false
+  
+  // Must be parseable
+  const num = Number(str)
+  return !isNaN(num)
+}
 
 /**
  * Service that provides type-safe access to environment variables through dependency injection.
@@ -52,6 +81,27 @@ export const CONFIG_OPTIONS = Symbol("CONFIG_OPTIONS")
  *   const redis = this.config.redisHost || 'localhost'
  * }
  *
+ * @example
+ * // With coerce enabled for automatic type conversion
+ * interface ServerConfig {
+ *   port: number        // "3000" → 3000
+ *   debug: boolean      // "true" → true
+ *   timeout: number     // "30" → 30
+ *   apiKey: string      // Stays as string
+ * }
+ *
+ * // Enable coerce in module
+ * ConfigModule.forRoot({ coerce: true })
+ *
+ * constructor(
+ *   @InjectConfig()
+ *   private config: TypedConfig<ServerConfig>
+ * ) {
+ *   const port = this.config.port      // number: 3000
+ *   const debug = this.config.debug    // boolean: true
+ *   const timeout = this.config.timeout // number: 30
+ * }
+ *
  * @remarks
  * Supports destructuring: const { apiKey, apiUrl } = this.config
  *
@@ -65,7 +115,10 @@ export class ConfigService<T extends Record<string, any>> {
     options: Partial<ConfigOptions> = {},
   ) {
     return new Proxy(this as unknown as T, {
-      get: (_target, prop: string): string | undefined => {
+      get: (
+        _target,
+        prop: string,
+      ): string | boolean | number | undefined | null => {
         // Handle special properties that shouldn't trigger strict mode
         if (typeof prop === "symbol" || prop === "then" || prop === "toJSON") {
           return undefined
@@ -82,6 +135,29 @@ export class ConfigService<T extends Record<string, any>> {
           throw new Error(
             `Strict mode error when accessing configuration property '${prop}'. ${envKey} is not defined on process.env`,
           )
+        }
+
+        if (options.coerce) {
+          if (value === "null") {
+            return null
+          }
+
+          if (value === "undefined") {
+            return undefined
+          }
+
+          if (value === "true") {
+            return true
+          }
+
+          if (value === "false") {
+            return false
+          }
+
+          // Only parse numbers that don't have decimal leading zeros or are empty
+          if (isCleanNumber(value)) {
+            return Number(value)
+          }
         }
 
         return value
@@ -110,6 +186,14 @@ export class ConfigService<T extends Record<string, any>> {
  * @example
  * type Config = TypedConfig<{ apiKey: string; debugMode?: string }>
  * // Results in a type where apiKey is required and debugMode is optional
+ *
+ * @example
+ * // With coerce enabled, use appropriate TypeScript types
+ * type ServerConfig = TypedConfig<{ 
+ *   port: number;     // Will be coerced from string
+ *   debug: boolean;   // Will be coerced from "true"/"false"
+ *   name: string;     // Stays as string
+ * }>
  */
 export type TypedConfig<T extends Record<string, any>> = ConfigService<T> &
   Readonly<T>
