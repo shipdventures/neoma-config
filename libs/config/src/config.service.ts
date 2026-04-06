@@ -120,13 +120,24 @@ export class ConfigService<T extends Record<string, any>> {
         .replace(/([A-Z]+)([A-Z][a-z0-9]+)/g, "$1_$2")
         .toUpperCase()
 
+    const ignoredProperties = new Set([
+      "then",
+      "toJSON",
+      // NestJS lifecycle hooks — the framework probes these via property access
+      // during module init/shutdown. They must not trigger strict mode.
+      "onModuleInit",
+      "onModuleDestroy",
+      "onApplicationBootstrap",
+      "onApplicationShutdown",
+      "beforeApplicationShutdown",
+    ])
+
     return new Proxy(this as unknown as T, {
       get: (
         _target,
         prop: string | symbol,
       ): string | boolean | number | undefined | null => {
-        // Handle special properties that shouldn't trigger strict mode
-        if (typeof prop === "symbol" || prop === "then" || prop === "toJSON") {
+        if (typeof prop === "symbol" || ignoredProperties.has(prop)) {
           return undefined
         }
 
@@ -165,8 +176,7 @@ export class ConfigService<T extends Record<string, any>> {
         return value
       },
       has: (_target, prop: string | symbol): boolean => {
-        // Handle special properties
-        if (typeof prop === "symbol" || prop === "then" || prop === "toJSON") {
+        if (typeof prop === "symbol" || ignoredProperties.has(prop)) {
           return false
         }
 

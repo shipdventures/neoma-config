@@ -238,6 +238,8 @@ describe("ConfigService", () => {
           imports: [ConfigModule.forRoot({ strict: true })],
         }).compile()
 
+        await app.init()
+
         config = app.get(ConfigService)
       })
 
