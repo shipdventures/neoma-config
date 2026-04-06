@@ -123,7 +123,7 @@ export class ConfigService<T extends Record<string, any>> {
     return new Proxy(this as unknown as T, {
       get: (
         _target,
-        prop: string,
+        prop: string | symbol,
       ): string | boolean | number | undefined | null => {
         // Handle special properties that shouldn't trigger strict mode
         if (typeof prop === "symbol" || prop === "then" || prop === "toJSON") {
@@ -164,7 +164,7 @@ export class ConfigService<T extends Record<string, any>> {
 
         return value
       },
-      has: (_target, prop: string): boolean => {
+      has: (_target, prop: string | symbol): boolean => {
         // Handle special properties
         if (typeof prop === "symbol" || prop === "then" || prop === "toJSON") {
           return false

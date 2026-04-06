@@ -52,7 +52,7 @@ describe("ConfigModule", () => {
           imports: [ConfigModule],
           controllers: [ChildController],
         }).compile(),
-      ).rejects.toThrow()
+      ).rejects.toThrow(/Nest can't resolve dependencies/)
     })
   })
 
