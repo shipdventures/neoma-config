@@ -4,7 +4,7 @@ import {
   InjectConfig,
   TypedConfig,
 } from "@neoma/config"
-import { Controller } from "@nestjs/common"
+import { Controller, Module } from "@nestjs/common"
 import { Test } from "@nestjs/testing"
 
 describe("ConfigModule", () => {
@@ -12,6 +12,47 @@ describe("ConfigModule", () => {
     it("should return a global dynamic module", () => {
       const module = ConfigModule.forRoot()
       expect(module).toHaveProperty("global", true)
+    })
+  })
+
+  describe("global registration", () => {
+    it("should make ConfigService available to child modules that do not import ConfigModule", async () => {
+      @Controller()
+      class ChildController {
+        public constructor(
+          @InjectConfig()
+          public config: TypedConfig<{ testVar: string }>,
+        ) {}
+      }
+
+      @Module({
+        controllers: [ChildController],
+      })
+      class ChildModule {}
+
+      const module = await Test.createTestingModule({
+        imports: [ConfigModule.forRoot(), ChildModule],
+      }).compile()
+
+      const controller = module.get(ChildController)
+      expect(controller.config).toBeInstanceOf(ConfigService)
+    })
+
+    it("should not provide ConfigService when using plain ConfigModule", async () => {
+      @Controller()
+      class ChildController {
+        public constructor(
+          @InjectConfig()
+          public config: TypedConfig<{ testVar: string }>,
+        ) {}
+      }
+
+      await expect(
+        Test.createTestingModule({
+          imports: [ConfigModule],
+          controllers: [ChildController],
+        }).compile(),
+      ).rejects.toThrow()
     })
   })
 
