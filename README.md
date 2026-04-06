@@ -52,17 +52,19 @@ npm install @neoma/config
 
 ## Basic Usage
 
-### 1. Import the ConfigModule
+### 1. Register the ConfigModule
 
 ```typescript
 import { Module } from "@nestjs/common"
 import { ConfigModule } from "@neoma/config"
 
 @Module({
-  imports: [ConfigModule],
+  imports: [ConfigModule.forRoot()],
 })
 export class AppModule {}
 ```
+
+`forRoot()` registers globally — `ConfigService` is available in all modules without additional imports.
 
 ### 2. Load environment variables (optional)
 
