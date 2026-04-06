@@ -114,6 +114,12 @@ export class ConfigService<T extends Record<string, any>> {
     @Inject(CONFIG_OPTIONS)
     options: Partial<ConfigOptions> = {},
   ) {
+    const toEnvKey = (prop: string) =>
+      prop
+        .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
+        .replace(/([A-Z]+)([A-Z][a-z0-9]+)/g, "$1_$2")
+        .toUpperCase()
+
     return new Proxy(this as unknown as T, {
       get: (
         _target,
@@ -124,12 +130,9 @@ export class ConfigService<T extends Record<string, any>> {
           return undefined
         }
 
-        const envKey = prop
-          .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
-          .replace(/([A-Z]+)([A-Z][a-z0-9]+)/g, "$1_$2")
-          .toUpperCase()
-
-        const value = process.env[envKey]
+        const envKey = toEnvKey(prop)
+        const value =
+          process.env[envKey] ?? process.env[envKey.toLowerCase()]
 
         if (value === undefined && options.strict) {
           throw new Error(
@@ -168,12 +171,11 @@ export class ConfigService<T extends Record<string, any>> {
           return false
         }
 
-        const envKey = prop
-          .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
-          .replace(/([A-Z]+)([A-Z][a-z0-9]+)/g, "$1_$2")
-          .toUpperCase()
+        const envKey = toEnvKey(prop)
+        const value =
+          process.env[envKey] ?? process.env[envKey.toLowerCase()]
 
-        return process.env[envKey] !== undefined
+        return value !== undefined
       },
     })
   }

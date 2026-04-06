@@ -25,6 +25,13 @@ const envLeadingTrailingWhitespace = " 123 "
 const envEmpty = ""
 const envDecimal = "0.123"
 
+// Test data for case-insensitive fallback
+const snakeCaseKey = faker.lorem.word()
+const snakeCaseValue = faker.lorem.word()
+const uppercaseValue = faker.lorem.word()
+const snakeCaseInt = faker.number.int().toString()
+const snakeCaseBool = "true"
+
 // Test data for env loading
 const environment = faker.lorem.word()
 process.env.NODE_ENV = environment
@@ -72,6 +79,9 @@ describe("ConfigService", () => {
     process.env.ENV_LEADING_TRAILING_WHITESPACE = envLeadingTrailingWhitespace
     process.env.ENV_EMPTY = envEmpty
     process.env.ENV_DECIMAL = envDecimal
+    process.env[snakeCaseKey] = snakeCaseValue
+    process.env.snake_case_int = snakeCaseInt
+    process.env.snake_case_bool = snakeCaseBool
   })
 
   describe("property access", () => {
@@ -189,6 +199,25 @@ describe("ConfigService", () => {
           it("'notDefined' should return undefined when process.env.NOT_DEFINED is not set", () => {
             expect(config.notDefined).toBeUndefined()
           })
+
+          it("Checking for the existence of 'notDefined' should return false when neither case is set", () => {
+            expect("notDefined" in config).toBeFalse()
+          })
+        })
+
+        describe("case-insensitive fallback", () => {
+          it(`'${snakeCaseKey}' should return value from lowercase env var when uppercase is not set`, () => {
+            expect(config[snakeCaseKey]).toBe(snakeCaseValue)
+          })
+
+          it(`Checking for the existence of '${snakeCaseKey}' should return true when only lowercase is set`, () => {
+            expect(snakeCaseKey in config).toBeTrue()
+          })
+
+          it("uppercase takes precedence when both exist", () => {
+            process.env[snakeCaseKey.toUpperCase()] = uppercaseValue
+            expect(config[snakeCaseKey]).toBe(uppercaseValue)
+          })
         })
       })
     })
@@ -224,6 +253,13 @@ describe("ConfigService", () => {
 
       it(`Checking for the existence of'${notDefinedKey}' should return false when process.env.${notDefinedKey.toUpperCase()} is not set`, () => {
         expect(notDefinedKey in config).toBeFalse()
+      })
+
+      it("should not throw when only the lowercase env var is set", () => {
+        const lcKey = faker.lorem.word()
+        const lcValue = faker.lorem.word()
+        process.env[lcKey] = lcValue
+        expect(config[lcKey]).toBe(lcValue)
       })
     })
   })
@@ -345,6 +381,15 @@ describe("ConfigService", () => {
     it(`it should coerce '${envDecimal}' to ${Number(envDecimal)} (valid decimal)`, () => {
       expect(config.envDecimal).toBeNumber()
       expect(config.envDecimal).toEqual(Number(envDecimal))
+    })
+
+    it(`it should coerce lowercase fallback '${snakeCaseInt}' to ${Number(snakeCaseInt)}`, () => {
+      expect(config.snakeCaseInt).toBeNumber()
+      expect(config.snakeCaseInt).toEqual(Number(snakeCaseInt))
+    })
+
+    it("it should coerce lowercase fallback 'true' to the true boolean value", () => {
+      expect(config.snakeCaseBool).toBeTrue()
     })
   })
 
