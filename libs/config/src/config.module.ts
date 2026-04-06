@@ -6,12 +6,11 @@ import * as dotenv from "dotenv"
  * Module that provides type-safe access to environment variables through dependency injection.
  * Automatically converts between camelCase properties and SCREAMING_SNAKE_CASE environment variables.
  *
- * @example
- * // Import in your module
- * imports: [ConfigModule]
+ * Must be registered via `forRoot()` which makes the module global.
  *
- * // Or with options
- * imports: [ConfigModule.forRoot({ loadEnv: true, strict: true })]
+ * @example
+ * // Register once at the app root — available everywhere
+ * imports: [ConfigModule.forRoot()]
  *
  * @example
  * // With strict mode - throws on undefined env vars
@@ -20,22 +19,8 @@ import * as dotenv from "dotenv"
  * @example
  * // With coerce enabled - automatic type conversion
  * imports: [ConfigModule.forRoot({ coerce: true })]
- * // Now "3000" becomes 3000, "true" becomes true, etc.
- *
- * @example
- * // Inject in your service
- * constructor(
- *   @InjectConfig()
- *   private config: TypedConfig<{ databaseUrl: string }>
- * ) {}
- *
- * // Access environment variables with type safety
- * const url = this.config.databaseUrl // reads from DATABASE_URL
  */
-@Module({
-  providers: [ConfigService],
-  exports: [ConfigService],
-})
+@Module({})
 export class ConfigModule {
   public static forRoot({
     loadEnv = false,
@@ -55,6 +40,7 @@ export class ConfigModule {
     }
 
     return {
+      global: true,
       module: ConfigModule,
       providers: [
         ConfigService,

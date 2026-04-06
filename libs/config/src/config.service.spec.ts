@@ -37,7 +37,6 @@ const appBuild = "build-node_env" // From .env.{environment}
 const appName = "config-env" // From .env
 
 const modules = [
-  { title: "ConfigModule", module: ConfigModule },
   { title: "ConfigModule.forRoot()", module: ConfigModule.forRoot() },
   {
     title:
@@ -45,7 +44,7 @@ const modules = [
     module: ConfigModule.forRoot({
       loadEnv: false,
       strict: false,
-      // coerce: false,
+      coerce: false,
     }),
   },
 ]

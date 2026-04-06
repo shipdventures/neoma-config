@@ -8,6 +8,13 @@ import { Controller } from "@nestjs/common"
 import { Test } from "@nestjs/testing"
 
 describe("ConfigModule", () => {
+  describe("forRoot()", () => {
+    it("should return a global dynamic module", () => {
+      const module = ConfigModule.forRoot()
+      expect(module).toHaveProperty("global", true)
+    })
+  })
+
   describe("@InjectConfig decorator", () => {
     it("should inject ConfigService into controller constructor", async () => {
       @Controller()
@@ -19,7 +26,7 @@ describe("ConfigModule", () => {
       }
 
       const module = await Test.createTestingModule({
-        imports: [ConfigModule],
+        imports: [ConfigModule.forRoot()],
         controllers: [TestController],
       }).compile()
 
