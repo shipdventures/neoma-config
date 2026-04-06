@@ -383,12 +383,12 @@ describe("ConfigService", () => {
       expect(config.envDecimal).toEqual(Number(envDecimal))
     })
 
-    it(`it should coerce lowercase fallback '${snakeCaseInt}' to ${Number(snakeCaseInt)}`, () => {
+    it(`'snakeCaseInt' should coerce snake_case_int fallback '${snakeCaseInt}' to ${Number(snakeCaseInt)}`, () => {
       expect(config.snakeCaseInt).toBeNumber()
       expect(config.snakeCaseInt).toEqual(Number(snakeCaseInt))
     })
 
-    it("it should coerce lowercase fallback 'true' to the true boolean value", () => {
+    it("'snakeCaseBool' should coerce snake_case_bool fallback 'true' to the true boolean value", () => {
       expect(config.snakeCaseBool).toBeTrue()
     })
   })
