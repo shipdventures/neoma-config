@@ -9,22 +9,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **Global `forRoot()`** — `ConfigModule.forRoot()` now sets `global: true`, making `ConfigService` available app-wide without importing `ConfigModule` in every child module
-- **Case-insensitive env var lookup** — Falls back to lowercase when the UPPER key isn't found (e.g. `config.npmPackageVersion` resolves `npm_package_version`). UPPER takes precedence when both exist. Uses `??` to preserve empty strings.
+- **Global `forRoot()`** — `ConfigModule.forRoot()` now sets `global: true`,
+  making `ConfigService` available app-wide without importing `ConfigModule`
+  in every child module
+- **Case-insensitive env var lookup** — Falls back to lowercase when the
+  UPPER key isn't found (e.g. `config.npmPackageVersion` resolves `npm_package_version`).
+  UPPER takes precedence when both exist. Uses `??` to preserve empty strings.
 
 ### Changed
 
-- Extracted `toEnvKey()` helper inside `ConfigService` to eliminate duplication between get/has traps
+- Extracted `toEnvKey()` helper inside `ConfigService` to eliminate duplication
+  between get/has traps
 
 ### Breaking
 
-- **`ConfigModule` must now be registered via `forRoot()`** — the plain `@Module({})` decorator no longer provides `ConfigService`. Migration: `ConfigModule` → `ConfigModule.forRoot()`
+- **`ConfigModule` must now be registered via `forRoot()`** — the plain
+  `@Module({})` decorator no longer provides `ConfigService`.
+  Migration: `ConfigModule` → `ConfigModule.forRoot()`
 
 ## [0.3.0] - 2025-11-05
 
 ### Added
 
-- **Type coercion feature** via `ConfigModule.forRoot({ coerce: true })` for automatic primitive conversion
+- **Type coercion feature** via `ConfigModule.forRoot({ coerce: true })`
+  for automatic primitive conversion
 - Smart conversion of environment variable strings to JavaScript primitives:
   - `"true"/"false"` → boolean values
   - Numeric strings → numbers (integers, floats, hex, octal, binary, scientific notation)
@@ -47,7 +55,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **'has' trap support** for safe property existence checking using `'property' in config` syntax
+- **'has' trap support** for safe property existence checking using
+  `'property' in config` syntax
 - Safe existence checking that doesn't trigger strict mode errors
 - Documentation and examples for ecosystem package integration patterns
 
@@ -60,20 +69,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **Strict mode** via `ConfigModule.forRoot({ strict: true })` for runtime validation of environment variables
-- Throws descriptive errors when accessing undefined environment variables in strict mode
+- **Strict mode** via `ConfigModule.forRoot({ strict: true })`
+  for runtime validation of environment variables
+- Throws descriptive errors when accessing undefined environment variables in
+  strict mode
 - Comprehensive test coverage for strict mode behavior
 - Documentation and examples for strict mode usage
 
 ### Changed
 
-- Optimized test suite by removing redundant E2E tests in favor of comprehensive integration tests
+- Optimized test suite by removing redundant E2E tests in favor of
+  comprehensive integration tests
 - All tests now use package imports (`@neoma/config`) to validate real package behavior
 - Added focused @InjectConfig decorator testing
 
 ### Removed
 
-- Removed unimplemented `coerce` option from ConfigOptions type (breaking change for TypeScript users)
+- Removed unimplemented `coerce` option from ConfigOptions type
+  (breaking change for TypeScript users)
 
 ## [0.1.1] - 2025-11-04
 
@@ -95,7 +108,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for multiple naming conventions (camelCase, PascalCase, mixed case)
 - Full destructuring support
 - Comprehensive documentation and examples
-- Support for `.env`, `.env.local`, `.env.{NODE_ENV}`, and `.env.{NODE_ENV}.local` files
+- Support for `.env`, `.env.local`, `.env.{NODE_ENV}`,
+  and `.env.{NODE_ENV}.local` files
 
 [Unreleased]: https://github.com/shipdventures/neoma-config/compare/v0.3.0...HEAD
 [0.3.0]: https://github.com/shipdventures/neoma-config/compare/v0.2.1...v0.3.0
@@ -103,4 +117,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.2.0]: https://github.com/shipdventures/neoma-config/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/shipdventures/neoma-config/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/shipdventures/neoma-config/releases/tag/v0.1.0
-
