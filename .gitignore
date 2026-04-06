@@ -16,6 +16,9 @@ lerna-debug.log*
 # OS
 .DS_Store
 
+# Claude Code
+.claude
+
 # Tests
 /coverage
 /.nyc_output

@@ -1,1 +1,0 @@
-- [Release process](project_release_process.md) — branch → PR → merge → bump version on main, never on feature branches

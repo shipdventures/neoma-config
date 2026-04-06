@@ -26,7 +26,7 @@ const envEmpty = ""
 const envDecimal = "0.123"
 
 // Test data for case-insensitive fallback
-const snakeCaseKey = faker.lorem.word()
+const snakeCaseKey = `snake_case_test_${faker.lorem.word()}`
 const snakeCaseValue = faker.lorem.word()
 const uppercaseValue = faker.lorem.word()
 const snakeCaseInt = faker.number.int().toString()
