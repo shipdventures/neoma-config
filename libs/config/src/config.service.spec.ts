@@ -94,6 +94,8 @@ describe("ConfigService", () => {
             imports: [module],
           }).compile()
 
+          await app.init()
+
           config = app.get(ConfigService)
         })
 
@@ -238,6 +240,8 @@ describe("ConfigService", () => {
           imports: [ConfigModule.forRoot({ strict: true })],
         }).compile()
 
+        await app.init()
+
         config = app.get(ConfigService)
       })
 
@@ -275,6 +279,8 @@ describe("ConfigService", () => {
           imports: [ConfigModule.forRoot({ loadEnv: true })],
         }).compile()
 
+        await app.init()
+
         config = app.get(ConfigService)
       })
 
@@ -299,6 +305,8 @@ describe("ConfigService", () => {
       const app: TestingModule = await Test.createTestingModule({
         imports: [ConfigModule.forRoot({ coerce: true })],
       }).compile()
+
+      await app.init()
 
       config = app.get(ConfigService)
     })
@@ -402,6 +410,8 @@ describe("ConfigService", () => {
       const app: TestingModule = await Test.createTestingModule({
         imports: [ConfigModule.forRoot({ strict: true, coerce: true })],
       }).compile()
+
+      await app.init()
 
       config = app.get(ConfigService)
     })
