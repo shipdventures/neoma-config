@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Global `forRoot()`** — `ConfigModule.forRoot()` now sets `global: true`, making `ConfigService` available app-wide without importing `ConfigModule` in every child module
+- **Case-insensitive env var lookup** — Falls back to lowercase when the UPPER key isn't found (e.g. `config.npmPackageVersion` resolves `npm_package_version`). UPPER takes precedence when both exist. Uses `??` to preserve empty strings.
+
+### Changed
+- Extracted `toEnvKey()` helper inside `ConfigService` to eliminate duplication between get/has traps
+
+### Breaking
+- **`ConfigModule` must now be registered via `forRoot()`** — the plain `@Module({})` decorator no longer provides `ConfigService`. Migration: `ConfigModule` → `ConfigModule.forRoot()`
+
 ## [0.3.0] - 2025-11-05
 
 ### Added
